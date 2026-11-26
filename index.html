@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ko" data-lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>원정무 Jeongmu Won</title>
+<meta name="description" content="암모니아와 수소를 깨끗하게 태우는 버너를 설계하고 만들고 시험하는 서울과학기술대학교 원정무입니다.">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="원정무 Jeongmu Won">
+<meta property="og:description" content="Ammonia and hydrogen burners: design, build, test. Seoultech.">
+<meta property="og:url" content="https://jeongmu-won.github.io/">
+<meta name="theme-color" content="#FFFFFF">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Ccircle cx='10' cy='10' r='8.6' fill='none' stroke='%2318202B' stroke-width='1.6'/%3E%3Ccircle cx='10' cy='10' r='5.4' fill='none' stroke='%2318202B' stroke-width='1.6'/%3E%3Ccircle cx='10' cy='10' r='2.5' fill='%23D9761A'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  (function () {
+    var l;
+    try { l = localStorage.getItem('lang'); } catch (e) {}
+    if (l !== 'ko' && l !== 'en') {
+      l = (navigator.language || '').toLowerCase().indexOf('ko') === 0 ? 'ko' : 'en';
+    }
+    document.documentElement.setAttribute('data-lang', l);
+    document.documentElement.lang = l;
+  })();
+</script>
+<style>
+  :root {
+    --bg: #FFFFFF;
+    --paper: #F3F5F7;
+    --ink: #18202B;
+    --steel: #5B6672;
+    --rule: #DDE2E7;
+    --amber: #D9761A;
+    --link: #1F5FA8;
+    --font: "IBM Plex Sans KR", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 400 1rem/1.7 var(--font);
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+  [data-lang="ko"] .en, [data-lang="en"] .ko { display: none !important; }
+  a { color: var(--link); text-underline-offset: 3px; }
+  :focus-visible { outline: 2px solid var(--link); outline-offset: 3px; border-radius: 3px; }
+
+  .wrap { max-width: 46rem; margin: 0 auto; padding: 0 1.25rem; }
+
+  .top { display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; }
+  .langs { display: inline-flex; padding: 3px; border: 1px solid var(--rule); border-radius: 999px; }
+  .langs button {
+    font: 500 .8125rem/1 var(--font);
+    padding: .5rem .85rem;
+    border: 0; border-radius: 999px;
+    background: none; color: var(--steel); cursor: pointer;
+  }
+  .langs button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+
+  .hero { padding-top: 2.5rem; }
+  .portrait { display: block; width: 96px; height: 96px; border-radius: 50%; object-fit: cover; margin-bottom: 1.25rem; background: var(--paper); }
+  .name { margin: 0; font-size: clamp(2.25rem, 10vw, 3rem); font-weight: 700; line-height: 1.1; letter-spacing: -.02em; }
+  .portrait[hidden] { display: none; }
+  .alt-name { margin: .35rem 0 0; font-size: 1.0625rem; color: var(--steel); }
+  .role { margin: 1.25rem 0 0; font-weight: 500; line-height: 1.55; }
+  .lab { margin: .15rem 0 0; color: var(--steel); }
+  .lede { margin: 1.25rem 0 0; font-size: 1.1875rem; line-height: 1.6; max-width: 32em; }
+
+  .actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.75rem; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 2.75rem; padding: .6rem 1.2rem;
+    border: 1px solid var(--ink); border-radius: 999px;
+    background: transparent; color: var(--ink);
+    font: 500 .9375rem/1.2 var(--font);
+    text-decoration: none; cursor: pointer;
+  }
+  .btn.primary { background: var(--ink); color: #fff; }
+  .btn:hover { border-color: var(--link); }
+  .btn.primary:hover { background: var(--link); border-color: var(--link); }
+
+  section { padding-top: 3.5rem; }
+  h2 { margin: 0 0 .35rem; font-size: 1.5rem; font-weight: 700; line-height: 1.25; letter-spacing: -.01em; }
+  .section-sub { margin: 0 0 1.5rem; color: var(--steel); }
+
+  .builds { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem 1.25rem; }
+  .build figure { position: relative; margin: 0; aspect-ratio: 4 / 3; border-radius: 6px; overflow: hidden; background: var(--paper); display: flex; align-items: center; justify-content: center; }
+  .build figure img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .build h3 { margin: .85rem 0 0; font-size: 1.0625rem; font-weight: 600; line-height: 1.45; }
+  .build p { margin: .3rem 0 0; color: var(--steel); font-size: .9375rem; line-height: 1.65; }
+  .tags { display: flex; flex-wrap: wrap; gap: .35rem; margin: .65rem 0 0; padding: 0; list-style: none; }
+  .tags li { font-size: .75rem; line-height: 1; padding: .4rem .6rem; border: 1px solid var(--rule); border-radius: 999px; color: var(--steel); }
+
+  .themes { margin: 0; padding: 0; list-style: none; }
+  .themes li { padding: 1rem 0; border-top: 1px solid var(--rule); }
+  .themes li:last-child { border-bottom: 1px solid var(--rule); }
+  .themes strong { display: block; font-weight: 600; }
+  .themes span.desc { display: block; margin-top: .2rem; color: var(--steel); font-size: .9375rem; }
+
+  .skills { margin: 0; }
+  .skills > div { padding: .9rem 0; border-top: 1px solid var(--rule); }
+  .skills > div:last-child { border-bottom: 1px solid var(--rule); }
+  .skills dt { font-weight: 600; }
+  .skills dd { margin: .15rem 0 0; color: var(--steel); }
+
+  .pubs { margin: 0; padding: 0; list-style: none; }
+  .pubs li { padding: .85rem 0; border-top: 1px solid var(--rule); }
+  .pubs li:last-child { border-bottom: 1px solid var(--rule); }
+  .pubs .title { display: block; font-weight: 500; }
+  .pubs .meta { display: block; font-size: .875rem; color: var(--steel); }
+
+  .email { display: inline-block; margin-top: .5rem; font-size: 1.1875rem; font-weight: 500; }
+  .links { display: flex; flex-wrap: wrap; gap: .4rem 1.25rem; margin-top: .85rem; }
+  .links:empty { display: none; }
+
+  .site-error { margin: 1.5rem 0 0; padding: 1rem 1.1rem; border: 1px solid #C2410C; border-radius: 6px; background: #FFF4EC; color: #7C2D12; font-size: .9375rem; line-height: 1.6; }
+  .site-error:empty { display: none; }
+  footer { margin-top: 4rem; padding: 1.5rem 0 2.5rem; border-top: 1px solid var(--rule); font-size: .8125rem; color: var(--steel); }
+  footer p { margin: 0; }
+
+  @media (min-width: 40rem) {
+    .builds { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .skills > div { display: grid; grid-template-columns: 9rem 1fr; gap: 1.5rem; }
+    .skills dd { margin: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <svg width="26" height="26" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.6" fill="none" stroke="#18202B" stroke-width="1.3"/><circle cx="10" cy="10" r="5.4" fill="none" stroke="#18202B" stroke-width="1.3"/><circle cx="10" cy="10" r="2.4" fill="#D9761A"/></svg>
+    <div class="langs" role="group" aria-label="Language">
+      <button type="button" data-set-lang="ko" aria-pressed="false">한국어</button>
+      <button type="button" data-set-lang="en" aria-pressed="false">English</button>
+    </div>
+  </div>
+
+  <div class="site-error" id="site-error" role="alert"></div>
+
+  <header class="hero">
+    <img class="portrait" id="portrait" alt="원정무 Jeongmu Won" hidden>
+    <h1 class="name" id="name"></h1>
+    <p class="alt-name" id="alt-name"></p>
+    <p class="role" id="role"></p>
+    <p class="lab" id="lab"></p>
+    <p class="lede" id="lede"></p>
+    <div class="actions">
+      <a class="btn primary" data-email href="#"><span class="ko">메일 보내기</span><span class="en">Send email</span></a>
+      <button class="btn" type="button" data-vcard><span class="ko">연락처 저장</span><span class="en">Save contact</span></button>
+    </div>
+  </header>
+
+  <main>
+    <section aria-labelledby="h-builds">
+      <h2 id="h-builds"></h2>
+      <p class="section-sub" id="builds-sub"></p>
+      <div class="builds" id="builds"></div>
+    </section>
+
+    <section aria-labelledby="h-research">
+      <h2 id="h-research"></h2>
+      <ul class="themes" id="research"></ul>
+    </section>
+
+    <section aria-labelledby="h-skills">
+      <h2 id="h-skills"></h2>
+      <dl class="skills" id="skills"></dl>
+    </section>
+
+    <section id="pubs-section" aria-labelledby="h-pubs" hidden>
+      <h2 id="h-pubs"></h2>
+      <ul class="pubs" id="pubs"></ul>
+    </section>
+
+    <section aria-labelledby="h-contact">
+      <h2 id="h-contact"></h2>
+      <p style="margin:0" id="contact-text"></p>
+      <a class="email" data-email="text" href="#"></a>
+      <div class="links" id="links"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p id="footer"></p>
+  </footer>
+</div>
+
+<!-- 페이지 내용은 content.js에 있어요. 이 파일(index.html)은 틀이라 고치지 않아도 됩니다. -->
+<script src="content.js"></script>
+<script>
+(function () {
+  var root = document.documentElement;
+  var errBox = document.getElementById('site-error');
+
+  function setLang(l) {
+    root.setAttribute('data-lang', l);
+    root.lang = l;
+    document.querySelectorAll('[data-set-lang]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-set-lang') === l));
+    });
+    try { localStorage.setItem('lang', l); } catch (e) {}
+  }
+  document.querySelectorAll('[data-set-lang]').forEach(function (b) {
+    b.addEventListener('click', function () { setLang(b.getAttribute('data-set-lang')); });
+  });
+  setLang(root.getAttribute('data-lang') || 'ko');
+
+  function showError(detail) {
+    errBox.textContent = 'content.js를 읽지 못했어요. 마지막으로 고친 부분에서 작은따옴표(\')나 쉼표(,)가 빠지지 않았는지 확인해 주세요.' + (detail ? ' (' + detail + ')' : '');
+  }
+
+  var S = window.SITE;
+  if (!S) { showError(); return; }
+
+  try {
+    var P = S.profile || {}, L = S.labels || {};
+    var pk = P.ko || {}, pe = P.en || {};
+
+    function both(el, ko, en) {
+      var k = document.createElement('span'); k.className = 'ko'; k.textContent = ko || '';
+      var e = document.createElement('span'); e.className = 'en'; e.textContent = en || '';
+      el.appendChild(k); el.appendChild(e);
+    }
+    function label(id, key) { var l = L[key] || {}; both(document.getElementById(id), l.ko, l.en); }
+    function rings(size) {
+      var ns = 'http://www.w3.org/2000/svg';
+      var s = document.createElementNS(ns, 'svg');
+      s.setAttribute('width', size); s.setAttribute('height', size);
+      s.setAttribute('viewBox', '0 0 20 20'); s.setAttribute('aria-hidden', 'true');
+      [[8.6, 'none', '#AEB7C0'], [5.4, 'none', '#AEB7C0'], [2.4, '#D9761A', 'none']].forEach(function (c) {
+        var el = document.createElementNS(ns, 'circle');
+        el.setAttribute('cx', 10); el.setAttribute('cy', 10); el.setAttribute('r', c[0]);
+        el.setAttribute('fill', c[1]); el.setAttribute('stroke', c[2]); el.setAttribute('stroke-width', '.9');
+        s.appendChild(el);
+      });
+      return s;
+    }
+
+    if (pk.name || pe.name) document.title = [pk.name, pe.name].filter(Boolean).join(' ');
+
+    var portrait = document.getElementById('portrait');
+    if (P.photo) {
+      portrait.onload = function () { portrait.hidden = false; };
+      portrait.onerror = function () { portrait.remove(); };
+      portrait.src = P.photo;
+    } else { portrait.remove(); }
+
+    both(document.getElementById('name'), pk.name, pe.name);
+    both(document.getElementById('alt-name'), pe.name, pk.name);
+    both(document.getElementById('role'), pk.role, pe.role);
+    both(document.getElementById('lab'), pk.lab, pe.lab);
+    both(document.getElementById('lede'), pk.intro, pe.intro);
+    both(document.getElementById('footer'), '© ' + (pk.name || '') + ' ' + (pe.name || ''), '© ' + (pe.name || ''));
+
+    label('h-builds', 'builds'); label('builds-sub', 'buildsSub');
+    label('h-research', 'research'); label('h-skills', 'skills');
+    label('h-pubs', 'pubs'); label('h-contact', 'contact'); label('contact-text', 'contactText');
+
+    var buildsEl = document.getElementById('builds');
+    (S.builds || []).forEach(function (b) {
+      var bk = b.ko || {}, be = b.en || {};
+      var art = document.createElement('article'); art.className = 'build';
+      var fig = document.createElement('figure');
+      fig.appendChild(rings(64));
+      if (b.photo) {
+        var img = document.createElement('img');
+        img.alt = be.title || bk.title || ''; img.loading = 'lazy';
+        img.onerror = function () { img.remove(); };
+        img.src = b.photo;
+        fig.appendChild(img);
+      }
+      art.appendChild(fig);
+      var h = document.createElement('h3'); both(h, bk.title, be.title); art.appendChild(h);
+      var p = document.createElement('p'); both(p, bk.text, be.text); art.appendChild(p);
+      [['ko', bk], ['en', be]].forEach(function (pair) {
+        var tags = pair[1].tags || [];
+        if (!tags.length) return;
+        var ul = document.createElement('ul'); ul.className = 'tags ' + pair[0];
+        tags.forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
+        art.appendChild(ul);
+      });
+      buildsEl.appendChild(art);
+    });
+
+    var resEl = document.getElementById('research');
+    (S.research || []).forEach(function (r) {
+      var li = document.createElement('li');
+      ['ko', 'en'].forEach(function (l) {
+        var x = r[l] || {};
+        var wrap = document.createElement('div'); wrap.className = l;
+        var st = document.createElement('strong'); st.textContent = x.title || '';
+        var d = document.createElement('span'); d.className = 'desc'; d.textContent = x.text || '';
+        wrap.appendChild(st); wrap.appendChild(d); li.appendChild(wrap);
+      });
+      resEl.appendChild(li);
+    });
+
+    var skEl = document.getElementById('skills');
+    (S.skills || []).forEach(function (s) {
+      var sk = s.ko || {}, se = s.en || {};
+      var row = document.createElement('div');
+      var dt = document.createElement('dt'); both(dt, sk.title, se.title);
+      var dd = document.createElement('dd'); both(dd, sk.text, se.text);
+      row.appendChild(dt); row.appendChild(dd); skEl.appendChild(row);
+    });
+
+    var pubs = S.pubs || [];
+    if (pubs.length) {
+      var pubEl = document.getElementById('pubs');
+      pubs.forEach(function (p) {
+        var li = document.createElement('li');
+        var t = document.createElement('span'); t.className = 'title'; t.textContent = p.title || '';
+        var m = document.createElement('span'); m.className = 'meta'; m.textContent = p.meta || '';
+        li.appendChild(t); li.appendChild(m); pubEl.appendChild(li);
+      });
+      document.getElementById('pubs-section').hidden = false;
+    }
+
+    document.querySelectorAll('[data-email]').forEach(function (a) {
+      a.href = 'mailto:' + (P.email || '');
+      if (a.getAttribute('data-email') === 'text') a.textContent = P.email || '';
+    });
+
+    var links = document.getElementById('links'), LK = S.links || {};
+    [['linkedin', 'LinkedIn'], ['scholar', 'Google Scholar'], ['orcid', 'ORCID']].forEach(function (p) {
+      if (!LK[p[0]]) return;
+      var a = document.createElement('a');
+      a.href = LK[p[0]]; a.textContent = p[1]; a.rel = 'noopener';
+      links.appendChild(a);
+    });
+
+    function saveContact() {
+      var lines = [
+        'BEGIN:VCARD', 'VERSION:3.0',
+        'N:Won;Jeongmu;;;',
+        'FN:' + [pk.name, pe.name].filter(Boolean).join(' '),
+        'ORG:Seoul National University of Science and Technology;Future Energy Convergence',
+        'TITLE:' + String(pe.role || '').split(',')[0],
+        'EMAIL;TYPE=INTERNET:' + (P.email || '')
+      ];
+      if (P.phone) lines.push('TEL;TYPE=CELL:' + P.phone);
+      lines.push('URL:https://jeongmu-won.github.io/');
+      if (LK.linkedin) lines.push('URL:' + LK.linkedin);
+      lines.push('END:VCARD');
+      var blob = new Blob([lines.join('\r\n')], { type: 'text/vcard;charset=utf-8' });
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'jeongmu-won.vcf';
+      document.body.appendChild(a); a.click();
+      setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    }
+    document.querySelectorAll('[data-vcard]').forEach(function (b) { b.addEventListener('click', saveContact); });
+  } catch (err) {
+    showError(err && err.message);
+  }
+})();
+</script>
+</body>
+</html>
